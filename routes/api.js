@@ -3,8 +3,14 @@ const router = express.Router();
 const Pratik = require('../models/pratiks')
 //get a list of pratiks from the database
 router.get('/pratiks', function(req, res,next){
-    Pratik.find({}).then(function(pratik){
-        
+  /*   Pratik.find({}).then(function(pratik){
+        res.send(pratik);
+    }) */
+    Pratik.geoNear(
+        {type: "Point",coordinates:[parseFloat(req.query.lng),parseFloat(req.query.lat)]},
+        {maxDistance: 100000,spherical: true}
+    ).then(function(pratiks){
+        res.send(pratiks)
     })
 });
 router.post('/pratiks', function(req, res,next){
